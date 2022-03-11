@@ -1,6 +1,7 @@
 module.exports = app => {
   const auth = require("./auth.routes");
   const user = require("./user.routes");
+  const carton = require("./carton.routes");
 
   app.use(function (req, res, next) {
     res.header(
@@ -9,6 +10,8 @@ module.exports = app => {
     );
     next();
   });  
+  
   app.use(`/api/v1/auth`, auth);
   app.use(`/api/v1/user`, user);
+  app.use(`/api/v1/carton`, carton);
 };

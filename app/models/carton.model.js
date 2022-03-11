@@ -2,20 +2,25 @@ const mongoose = require("mongoose");
 const Carton = mongoose.model(
   "Carton",
   new mongoose.Schema({
+    user:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: String,
     description: String,
-    value: Double,
-    price: Double,
-    cant: int,
+    value: Number,
+    price: Number,
+    cant: Number,
     stalls: [
       {
-        numstalls:int,
-        state: int,
+        numstalls:Number,
+        state: Number,
         user:String
       },
     ],
     lotery:String,
-    winnumber:int
+    winnumber:Number
   })
 );
 module.exports = Carton;
