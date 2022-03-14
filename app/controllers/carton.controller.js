@@ -1,10 +1,10 @@
 const Carton = require("../models/carton.model");
 
 exports.createCarton = (req, res) => {
-  const { title, description, value, price, cant, stalls, lottery, winnumber } =
+  const { user, title, description, value, price, cant, stalls, lottery, winnumber } =
     req.body;
-
   const carton = new Carton({
+    user,
     title: title,
     description: description,
     value,
