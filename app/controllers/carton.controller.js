@@ -1,7 +1,7 @@
 const Carton = require("../models/carton.model");
 
 exports.createCarton = (req, res) => {
-  const { user, title, description, value, price, cant, stalls, lottery, winnumber } =
+  const { user, title, description, value, price, cant, stalls, lottery } =
     req.body;
   const carton = new Carton({
     user,
@@ -12,7 +12,7 @@ exports.createCarton = (req, res) => {
     cant,
     stalls,
     lottery,
-    winnumber:0,
+    winnumber: 0,
   });
 
   carton.save((error, carton) => {
@@ -24,10 +24,39 @@ exports.createCarton = (req, res) => {
 };
 
 exports.get = (req, res) => {
-  Carton.findOne({ user: req.user._id }).exec((error, userAddress) => {
+  const { user } = req.body;
+  Carton.find({ user: user._id }).exec((error, cartons) => {
     if (error) return res.status(400).json({ error });
-    if (userAddress) {
-      res.status(200).json({ userAddress });
+    if (cartons) {
+      res.status(200).json({ cartons });
     }
+  });
+};
+
+exports.updateStalls = (req, res) => {
+  const { stalls, id } = req.body;
+
+  Carton.updateOne(
+    { _id: id, "stalls._id": stalls._id },
+    { $set: { "stalls.$.gambler": { _id: stalls.gambler._id } } }
+  ).exec((err, carton) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(carton);
+  });
+};
+
+exports.updateState = (req, res) => {
+  const { stalls, id } = req.body;
+
+  Carton.updateOne(
+    { _id: id, "stalls._id": stalls._id },
+    { $set: { "stalls.$.state": stalls.state } }
+  ).exec((err, carton) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(carton);
   });
 };
