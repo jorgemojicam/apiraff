@@ -24,6 +24,15 @@ exports.createCarton = (req, res) => {
 };
 
 exports.get = (req, res) => {
+  Carton.find().exec((error, cartons) => {
+    if (error) return res.status(400).json({ error });
+    if (cartons) {
+      res.status(200).json({ cartons });
+    }
+  });
+};
+
+exports.getbyUser = (req, res) => {
   const { user } = req.body;
   Carton.find({ user: user._id }).exec((error, cartons) => {
     if (error) return res.status(400).json({ error });

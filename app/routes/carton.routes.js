@@ -3,7 +3,8 @@ const controller = require("../controllers/carton.controller");
 const express = require("express");
 const router = express.Router();
 
-router.get("/byUser", [authJwt.verifyToken], controller.get);
+router.get("/", [authJwt.verifyToken], controller.get);
+router.get("/byUser", [authJwt.verifyToken], controller.getbyUser);
 router.post("/", [authJwt.verifyToken], controller.createCarton);
 router.put("/updateStalls", [authJwt.verifyToken], controller.updateStalls);
 
