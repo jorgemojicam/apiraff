@@ -9,11 +9,14 @@ verifyToken = (req, res, next) => {
   const bearer = 'Bearer ';
 
   if (!authHeader || !authHeader.startsWith(bearer)) {
-    throw new HttpException(401, 'Access denied. No credentials sent!');
+    return res.status(401).send({
+      message: 'Access denied. No credentials sent!'
+    });
   }
   const token = authHeader.replace(bearer, '');
 
-  if (!token) {return res.status(403).send({
+  if (!token) {
+    return res.status(403).send({
       message: "No token provided!"
     });
   }
