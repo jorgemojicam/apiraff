@@ -1,24 +1,25 @@
 const Carton = require("../models/carton.model");
 
 exports.createCarton = (req, res) => {
-  const { user, title, description, value, price, cant, stalls, lottery } =
+  const { user, title, description, winprize, price, cant, stalls, lottery } =
     req.body;
   const carton = new Carton({
     user,
-    title: title,
-    description: description,
-    value,
+    title,
+    description,
+    winprize,
     price,
     cant,
     stalls,
     lottery,
     winnumber: 0,
   });
-
+  
+console.log(carton)
   carton.save((error, carton) => {
     if (error) return res.status(400).json({ error });
     if (carton) {
-      res.status(201).json({ carton, files: req.files });
+      res.status(200).json({ carton, files: req.files });
     }
   });
 };

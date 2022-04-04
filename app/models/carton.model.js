@@ -10,7 +10,7 @@ const Carton = mongoose.model(
       },
       title: String,
       description: String,
-      value: Number,
+      winprize: Number,
       price: Number,
       cant: Number,
       stalls: [
