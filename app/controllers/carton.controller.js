@@ -1,8 +1,17 @@
 const Carton = require("../models/carton.model");
 
 exports.createCarton = (req, res) => {
-  const { user, title, description, winprize, price, cant, stalls, lottery } =
-    req.body;
+  const {
+    user,
+    title,
+    description,
+    playdate,
+    winprize,
+    price,
+    cant,
+    stalls,
+    lottery,
+  } = req.body;
   const carton = new Carton({
     user,
     title,
@@ -13,9 +22,9 @@ exports.createCarton = (req, res) => {
     stalls,
     lottery,
     winnumber: 0,
+    playdate,
   });
-  
-console.log(carton)
+
   carton.save((error, carton) => {
     if (error) return res.status(400).json({ error });
     if (carton) {
