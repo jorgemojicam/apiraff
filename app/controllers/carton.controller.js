@@ -34,7 +34,40 @@ exports.createCarton = (req, res) => {
 };
 
 exports.get = (req, res) => {
-  Carton.find().exec((error, cartons) => {
+
+  const { id, page } = req.params;
+  
+  if (id === '0') {
+
+    Carton.findOne().sort({ playdate: 1 }).exec((error, carton) => {
+      var oid = carton._id      
+
+      Carton.find({ _id: { $gt: oid } })
+        .sort({ playdate: 1 })
+        .limit(page)
+        .exec((error, cartons) => {
+          if (error) return res.status(400).json({ error });
+          if (cartons) {
+            res.status(200).json({ cartons });
+          }
+        });
+    })    
+  } else {
+    Carton.find({ _id: { $gt: id } })
+      .sort({ playdate: 1 })
+      .limit(page)
+      .exec((error, cartons) => {
+        if (error) return res.status(400).json({ error });
+        if (cartons) {
+          res.status(200).json({ cartons });
+        }
+      });
+  }
+};
+
+exports.getbyUser = (req, res) => {
+  const id = req.params.id;
+  Carton.find({ user: id }).exec((error, cartons) => {
     if (error) return res.status(400).json({ error });
     if (cartons) {
       res.status(200).json({ cartons });
@@ -42,9 +75,9 @@ exports.get = (req, res) => {
   });
 };
 
-exports.getbyUser = (req, res) => {
-  const { user } = req.body;
-  Carton.find({ user: user._id }).exec((error, cartons) => {
+exports.getbyId = (req, res) => {
+  const id = req.params.id;
+  Carton.find({ _id: id }).exec((error, cartons) => {
     if (error) return res.status(400).json({ error });
     if (cartons) {
       res.status(200).json({ cartons });
@@ -54,16 +87,43 @@ exports.getbyUser = (req, res) => {
 
 exports.updateStalls = (req, res) => {
   const { stalls, id } = req.body;
-
-  Carton.updateOne(
-    { _id: id, "stalls._id": stalls._id },
-    { $set: { "stalls.$.gambler": { _id: stalls.gambler._id } } }
-  ).exec((err, carton) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(carton);
-  });
+  console.log(stalls)
+  if (stalls.gambler._id) {
+    Carton.findOneAndUpdate(
+      { _id: id, "stalls._id": stalls._id },
+      {
+        $set: {
+          "stalls.$.gambler":
+          {
+            _id: stalls.gambler._id,
+            username: 'henrry'
+          },
+          "stalls.$.state": stalls.state
+        }
+      },
+      { returnOriginal: false }
+    ).exec((err, carton) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json(carton);
+    });
+  } else {
+    Carton.findOneAndUpdate(
+      { _id: id, "stalls._id": stalls._id },
+      {
+        $set: {
+          "stalls.$.state": 1
+        }
+      },
+      { returnOriginal: false }
+    ).exec((err, carton) => {
+      if (err) {
+        res.send(err);
+      }
+      res.json(carton);
+    });
+  }
 };
 
 exports.updateState = (req, res) => {

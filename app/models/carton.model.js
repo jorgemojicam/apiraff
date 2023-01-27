@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const User = require("../models/user.model");
+
 const Carton = mongoose.model(
   "Carton",
   new mongoose.Schema(
@@ -10,18 +12,15 @@ const Carton = mongoose.model(
       },
       title: String,
       description: String,
-      playdate:Date,
+      playdate: Date,
       winprize: Number,
       price: Number,
       cant: Number,
       stalls: [
         {
           numstalls: Number,
-          state: Number,
-          gambler: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-          },
+          state: Number,          
+          gambler:Object,
         },
       ],
       lotery: String,

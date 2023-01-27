@@ -11,7 +11,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       return;
     }
     if (user) {
-      res.status(400).send({ message: "Failed! Username is already in use!" });
+      res.status(400).send({ message: "El Username esta siendo usando actualmente!" });
       return;
     }
     // Email
@@ -23,10 +23,22 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
         return;
       }
       if (user) {
-        res.status(400).send({ message: "Failed! Email is already in use!" });
+        res.status(400).send({ message: "El Email ya se encuentra en uso!" });
         return;
       }
-      next();
+      User.findOne({
+        celular: req.body.celular
+      }).exec((err, user) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        if (user) {
+          res.status(400).send({ message: "El celular ya esta en uso!" });
+          return;
+        }
+        next();
+      });
     });
   });
 };
