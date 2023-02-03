@@ -1,45 +1,22 @@
 const db = require("../models");
 const ROLES = db.ROLES;
-const User = db.user;
+const Auth = db.auth;
 checkDuplicateUsernameOrEmail = (req, res, next) => {
-  // Username
-  User.findOne({
-    username: req.body.username
+
+  // Email
+  Auth.findOne({
+    email: req.body.email
   }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
     if (user) {
-      res.status(400).send({ message: "El Username esta siendo usando actualmente!" });
+      res.status(400).send({ message: "El Email ya se encuentra en uso!" });
       return;
     }
-    // Email
-    User.findOne({
-      email: req.body.email
-    }).exec((err, user) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      if (user) {
-        res.status(400).send({ message: "El Email ya se encuentra en uso!" });
-        return;
-      }
-      User.findOne({
-        celular: req.body.celular
-      }).exec((err, user) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-        if (user) {
-          res.status(400).send({ message: "El celular ya esta en uso!" });
-          return;
-        }
-        next();
-      });
-    });
+    next();
+
   });
 };
 checkRolesExisted = (req, res, next) => {

@@ -36,25 +36,18 @@ exports.createCarton = (req, res) => {
 exports.get = (req, res) => {
 
   const { id, page } = req.params;
-  
+
   if (id === '0') {
-
-    Carton.findOne().sort({ playdate: 1 }).exec((error, carton) => {
-      var oid = carton._id      
-
-      Carton.find({ _id: { $gt: oid } })
-        .sort({ playdate: 1 })
-        .limit(page)
-        .exec((error, cartons) => {
-          if (error) return res.status(400).json({ error });
-          if (cartons) {
-            res.status(200).json({ cartons });
-          }
-        });
-    })    
+    Carton.find()
+      .limit(page)
+      .exec((error, cartons) => {
+        if (error) return res.status(400).json({ error });
+        if (cartons) {
+          res.status(200).json({ cartons });
+        }
+      });
   } else {
     Carton.find({ _id: { $gt: id } })
-      .sort({ playdate: 1 })
       .limit(page)
       .exec((error, cartons) => {
         if (error) return res.status(400).json({ error });
@@ -87,7 +80,7 @@ exports.getbyId = (req, res) => {
 
 exports.updateStalls = (req, res) => {
   const { stalls, id } = req.body;
-  console.log(stalls)
+  
   if (stalls.gambler._id) {
     Carton.findOneAndUpdate(
       { _id: id, "stalls._id": stalls._id },
@@ -96,7 +89,7 @@ exports.updateStalls = (req, res) => {
           "stalls.$.gambler":
           {
             _id: stalls.gambler._id,
-            username: 'henrry'
+            firstname: stalls.gambler.firtsname,
           },
           "stalls.$.state": stalls.state
         }

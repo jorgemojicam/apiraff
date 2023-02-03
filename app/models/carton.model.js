@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const User = require("../models/user.model");
 
 const Carton = mongoose.model(
   "Carton",
@@ -7,11 +6,17 @@ const Carton = mongoose.model(
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "Auth",
         required: true,
       },
-      title: String,
-      description: String,
+      title: {
+        type: String,
+        required: [true, "Campo requerido"],
+      },
+      description: {
+        type: String,
+        required: [true, "Campo requerido"],
+      },
       playdate: Date,
       winprize: Number,
       price: Number,
@@ -19,8 +24,8 @@ const Carton = mongoose.model(
       stalls: [
         {
           numstalls: Number,
-          state: Number,          
-          gambler:Object,
+          state: Number,
+          gambler: Object,
         },
       ],
       lotery: String,

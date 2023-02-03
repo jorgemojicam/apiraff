@@ -1,19 +1,21 @@
 const config = require("../config/db.config");
 const db = require("../models");
-const User = db.user;
+const Auth = db.auth;
 const Role = db.role;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res, next) => {
    
-    const user = new User({
-        username: req.body.username,
+    const auth = new Auth({        
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        user: {
+            firstname: req.body.firstname
+        }
     });
 
-    user.save((err, user) => {
+    auth.save((err, user) => {
         if (err) {
             res.status(500).send({
                 message: err
@@ -33,8 +35,8 @@ exports.signup = (req, res, next) => {
                         });
                         return;
                     }
-                    user.roles = roles.map(role => role._id);
-                    user.save(err => {
+                    auth.roles = roles.map(role => role._id);
+                    auth.save(err => {
                         if (err) {
                             res.status(500).send({
                                 message: err
@@ -55,8 +57,8 @@ exports.signup = (req, res, next) => {
                     });
                     return;
                 }
-                user.roles = [role._id];                
-                user.save(err => {
+                auth.roles = [role._id];                
+                auth.save(err => {
                     if (err) {                        
                         res.status(500).send({
                             message: err
@@ -70,18 +72,18 @@ exports.signup = (req, res, next) => {
     });
 };
 exports.signin = (req, res) => {
-    User.findOne({
-        username: req.body.username
+    Auth.findOne({
+        email: req.body.email
     })
         .populate("roles", "-__v")
-        .exec((err, user) => {
+        .exec((err, auth) => {
             if (err) {
                 res.status(500).send({
                     message: err
                 });
                 return;
             }
-            if (!user) {
+            if (!auth) {
                 res.status(401).send({
                     message: "Unauthorized"
                 });
@@ -89,7 +91,7 @@ exports.signin = (req, res) => {
             }
             var passwordIsValid = bcrypt.compareSync(
                 req.body.password,
-                user.password
+                auth.password
             );
             if (!passwordIsValid) {
                 res.status(401).send({
@@ -99,18 +101,18 @@ exports.signin = (req, res) => {
                 return;
             }
             var token = jwt.sign({
-                id: user.id
+                id: auth.id
             }, config.SECRET, {
                 expiresIn: 86400 // 24 hours
             });
             var authorities = [];
-            for (let i = 0; i < user.roles.length; i++) {
-                authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+            for (let i = 0; i < auth.roles.length; i++) {
+                authorities.push("ROLE_" + auth.roles[i].name.toUpperCase());
             }
             res.status(200).send({
-                id: user._id,
-                username: user.username,
-                email: user.email,
+                id: auth._id,                
+                email: auth.email,
+                user: auth.user,
                 roles: authorities,
                 accessToken: token
             });
