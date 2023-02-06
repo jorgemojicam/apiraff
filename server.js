@@ -13,30 +13,29 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// const uri = "mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+// client.connect(err => {
+//   console.log("Successfully connect to MongoDB.");
+//   initial();
+//   // perform actions on the collection object
+//   client.close();
+// });
 
-
-const uri = "mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  console.log("Successfully connect to MongoDB.");
-  initial();
-  // perform actions on the collection object
-  client.close();
-});
-
-// mongoose
-//   .connect(`mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-//   })
-//   .then(() => {
-//     console.log("Successfully connect to MongoDB.");
-//     initial();
-//   })
-//   .catch((err) => {
-//     console.error("Connection error", err);
-//     process.exit();
-//   });
+mongoose
+  .connect(`mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverApi: ServerApiVersion.v1 
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  })
+  .catch((err) => {
+    console.error("Connection error", err);
+    process.exit();
+  });
 
 
 // parse requests of content-type - application/json
