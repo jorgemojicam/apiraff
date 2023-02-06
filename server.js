@@ -17,8 +17,7 @@ app.use(cors(corsOptions));
 // const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 // client.connect(err => {
 //   console.log("Successfully connect to MongoDB.");
-//   initial();
-//   // perform actions on the collection object
+//   initial();  
 //   client.close();
 // });
 
