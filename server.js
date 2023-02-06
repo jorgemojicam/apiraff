@@ -12,8 +12,12 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 
+/*
+const uri = "mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+*/
 mongoose
-  .connect(`mongodb://${config.HOST}:${config.PORT}/${config.DB}`, {
+  .connect(`mongodb+srv://${config.HOST}:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
