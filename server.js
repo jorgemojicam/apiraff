@@ -3,13 +3,13 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { ServerApiVersion } = require('mongodb');
 const config = require("./app/config/db.config");
 const db = require("./app/models");
 const Role = db.role;
 
 var corsOptions = {
-  origin: ['http://localhost:3000', 'https://raff.netlify.app/'],
+  origin: ['http://localhost:3000', 'https://raff.netlify.app'],
 };
 app.use(cors(corsOptions));
 
