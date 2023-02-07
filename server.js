@@ -9,17 +9,9 @@ const db = require("./app/models");
 const Role = db.role;
 
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ['http://localhost:3000', 'https://raff.netlify.app/'],
 };
 app.use(cors(corsOptions));
-
-// const uri = "mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-// client.connect(err => {
-//   console.log("Successfully connect to MongoDB.");
-//   initial();  
-//   client.close();
-// });
 
 mongoose
   .connect(`mongodb+srv://tokagero:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
