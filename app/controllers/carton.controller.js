@@ -96,9 +96,11 @@ exports.updateStalls = (req, res) => {
       },
       { returnOriginal: false }
     ).exec((err, carton) => {
+
       if (err) {
         res.send(err);
       }
+
       res.json(carton);
     });
   } else {
@@ -106,7 +108,7 @@ exports.updateStalls = (req, res) => {
       { _id: id, "stalls._id": stalls._id },
       {
         $set: {
-          "stalls.$.state": 1
+          "stalls.$.state": stalls.state
         }
       },
       { returnOriginal: false }
@@ -122,9 +124,15 @@ exports.updateStalls = (req, res) => {
 exports.updateState = (req, res) => {
   const { stalls, id } = req.body;
 
-  Carton.updateOne(
+  Carton.findOneAndUpdate(
     { _id: id, "stalls._id": stalls._id },
-    { $set: { "stalls.$.state": stalls.state } }
+    {
+      $set:
+      {
+        "stalls.$.state": stalls.state    
+      }
+    },
+    { returnOriginal: false }
   ).exec((err, carton) => {
     if (err) {
       res.send(err);
