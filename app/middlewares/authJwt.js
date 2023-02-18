@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/db.config.js");
 const db = require("../models");
-const User = db.user;
+const Auth = db.auth;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
@@ -32,7 +32,7 @@ verifyToken = (req, res, next) => {
   });
 };
 isAdmin = (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  Auth.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({
         message: err

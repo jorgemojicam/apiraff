@@ -40,6 +40,7 @@ exports.get = (req, res) => {
   if (id === '0') {
     Carton.find()
       .limit(page)
+      .populate('user')
       .exec((error, cartons) => {
         if (error) return res.status(400).json({ error });
         if (cartons) {
@@ -49,6 +50,7 @@ exports.get = (req, res) => {
   } else {
     Carton.find({ _id: { $gt: id } })
       .limit(page)
+      .populate('user')
       .exec((error, cartons) => {
         if (error) return res.status(400).json({ error });
         if (cartons) {

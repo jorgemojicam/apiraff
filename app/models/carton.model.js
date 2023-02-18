@@ -30,6 +30,12 @@ const Carton = mongoose.model(
       ],
       lotery: String,
       winnumber: Number,
+      waytopay: [
+        {
+          name: String,
+          num: Number
+        }
+      ]
     },
     {
       timestamps: {

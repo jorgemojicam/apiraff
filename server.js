@@ -14,7 +14,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 mongoose
-  .connect(`mongodb+srv://${config.HOST}:puiTLeZRpSQIJ080@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
+  .connect(`mongodb+srv://${config.HOST}:${config.PASSWORD}@cluster0.2ua7ayh.mongodb.net/?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverApi: ServerApiVersion.v1 
