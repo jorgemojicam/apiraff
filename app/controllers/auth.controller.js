@@ -6,8 +6,8 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res, next) => {
-   
-    const auth = new Auth({        
+
+    const auth = new Auth({
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
         user: {
@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
             });
             return;
         }
-        if (req.body.roles) {            
+        if (req.body.roles) {
             Role.find({
                 name: {
                     $in: req.body.roles
@@ -43,11 +43,11 @@ exports.signup = (req, res, next) => {
                             });
                             return;
                         }
-                        res.send({message: "User was registered successfully!"});
+                        res.send({ message: "User was registered successfully!" });
                     });
                 }
             );
-        } else {            
+        } else {
             Role.findOne({
                 name: "user"
             }, (err, role) => {
@@ -57,15 +57,15 @@ exports.signup = (req, res, next) => {
                     });
                     return;
                 }
-                auth.roles = [role._id];                
+                auth.roles = [role._id];
                 auth.save(err => {
-                    if (err) {                        
+                    if (err) {
                         res.status(500).send({
                             message: err
                         });
                         return;
-                    }   
-                    res.status(200).send({message: "User was registered successfully!"});                    
+                    }
+                    res.status(200).send({ message: "User was registered successfully!" });
                 });
             });
         }
@@ -110,11 +110,37 @@ exports.signin = (req, res) => {
                 authorities.push("ROLE_" + auth.roles[i].name.toUpperCase());
             }
             res.status(200).send({
-                id: auth._id,                
+                id: auth._id,
                 email: auth.email,
                 user: auth.user,
                 roles: authorities,
                 accessToken: token
             });
         });
+};
+exports.get = (req, res) => {
+
+    const { id, page } = req.params;
+
+    if (id === '0') {
+        Auth.find()
+            .limit(page)
+            .populate('user')
+            .exec((error, users) => {
+                if (error) return res.status(400).json({ error });
+                if (users) {
+                    res.status(200).json({ users });
+                }
+            });
+    } else {
+        Auth.find({ _id: { $gt: id } })
+            .limit(page)
+            .populate('user')
+            .exec((error, users) => {
+                if (error) return res.status(400).json({ error });
+                if (users) {
+                    res.status(200).json({ users });
+                }
+            });
+    }
 };

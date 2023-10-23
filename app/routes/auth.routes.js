@@ -7,5 +7,6 @@ const validateSignUp = [verifySignUp.checkDuplicateUsernameOrEmail, verifySignUp
 
 router.post("/signup", validateSignUp, controller.signup);
 router.post("/signin", controller.signin);
+router.get("/:id&:page", controller.get);
 
-module.exports = router;
+module.exports = router; 
